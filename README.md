@@ -10,18 +10,7 @@ A web-based campus printing platform that allows students to upload documents, s
 
 ## Problem Statement
 
-Students on campus often have to:
-
-- Physically visit printing facilities to submit documents.
-- Wait in long and unpredictable queues.
-- Spend time finding an available printer.
-- Have little visibility into when their documents will be ready.
-- Depend on manual order handling by printer operators.
-- Face inefficient queue management when small and large print jobs are mixed together.
-
-Printer operators also need a simple way to manage orders, prioritize jobs, and track their progress.
-
-**CampusPrint. solves this by digitizing the complete campus printing workflow.**
+Smart campus printing and document service
 
 ---
 
