@@ -1,121 +1,363 @@
-# CampusPrint. — Smart Queue Management
+# CampusPrint.
 
-Deterministic queue management, no AI.
+## Project Name
 
-### Queue priority
-Each printer has its own queue:
-1. Urgent first
-2. Earlier order placement first (FCFS)
-3. Fewer total pages first when the above are tied
+**CampusPrint. — Smart Campus Printing & Queue Management System**
 
-### ETA
-Prototype calculation:
-- 2-minute setup per job
-- 1 minute per printed page
-- Estimated wait = total estimated time of orders ahead
-- ETA = current backend time + wait + this job's estimated print time
+A web-based campus printing platform that allows students to upload documents, select a printer, choose print settings, make a demo payment, and track their print order in real time.
 
-### Student tracking
-Shows queue position, estimated wait, estimated ready time, and estimated print time for Pending orders.
+---
 
-### Admin dashboard
-Shows queue position, estimated wait and ETA for Pending orders.
+## Problem Statement
 
-The UI refreshes queue data every 30 seconds.
+Students on campus often have to:
 
-### Statuses
-Pending, Ready, Completed only.
+- Physically visit printing facilities to submit documents.
+- Wait in long and unpredictable queues.
+- Spend time finding an available printer.
+- Have little visibility into when their documents will be ready.
+- Depend on manual order handling by printer operators.
+- Face inefficient queue management when small and large print jobs are mixed together.
 
-### Payment
-Demo payment only; no real gateway.
+Printer operators also need a simple way to manage orders, prioritize jobs, and track their progress.
 
-### Student authentication
-Registration Number = Excel IRIS Reference No.
-Password = Excel Admission Number.
+**CampusPrint. solves this by digitizing the complete campus printing workflow.**
 
-### Mac
-```bash
-cd ~/Downloads/CampusPrint_SmartQueue/backend
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
-Then open `frontend/index.html`.
+---
 
-Queue APIs:
-`GET /api/queue/Girls%20Co-op%20Printer`
-`GET /api/queue/Boys%20Co-op%20Printer`
+## Solution Logic
 
-
-## IST live ETA
-
-ETA timestamps are now returned in **India Standard Time (Asia/Kolkata, UTC+05:30)**.
-
-The browser keeps the displayed **time remaining live every second** using the ETA timestamp. Queue data is refreshed from the backend every 30 seconds, while the countdown itself updates every second.
-
-Backend current-time endpoint:
+The system follows this workflow:
 
 ```text
-GET /api/time/ist
+Student Login
+      ↓
+Upload Document
+      ↓
+Select Printer
+      ↓
+Select Print Settings
+      ↓
+Select Priority
+      ↓
+Create Order
+      ↓
+Demo Payment
+      ↓
+Smart Queue
+      ↓
+Queue Position + ETA
+      ↓
+Printer Admin
+      ↓
+Pending → Ready → Completed
+      ↓
+Student Tracks Order
 ```
 
-This returns the current IST time and Unix timestamp, which can be used to synchronize the UI.
+### Smart Queue Logic
 
-The ETA remains an estimate based on:
-- 2-minute setup per job
-- 1 minute per printed page
-- printer-specific queue
-- Urgent → FCFS → fewer pages priority
+Each printer has its own independent queue:
 
+```text
+Girls Co-op Printer → Girls Queue
+Boys Co-op Printer  → Boys Queue
+```
 
-## Admin login
-Boys Co-op:
-- ID: `boyscoop`
-- Password: `boys123`
+The queue uses a deterministic scheduling algorithm — **no AI is used**.
 
-Girls Co-op:
-- ID: `girlscoop`
-- Password: `girls123`
+Priority is calculated using:
 
-If you previously ran an older copy of the backend, stop it with Ctrl+C and start the backend from THIS folder so the corrected admin credentials are loaded.
+1. **Urgent priority** — Urgent orders are considered before Green Slot orders.
+2. **Aging/Fairness** — older orders receive increasing priority so that large jobs cannot wait indefinitely.
+3. **Shortest effective job first** — orders with fewer effective pages are prioritized.
+4. **Order time** — earlier orders win if the relevant priority values are tied.
 
+### Aging Mechanism
 
-## Updated Smart Queue Algorithm — Aging + Shortest Job First
-
-Within each printer, the queue now uses:
-
-1. **Urgent before Green Slot**
-2. **Starvation protection:** an order waiting 20+ minutes gets a fairness boost
-3. **Shortest effective job first:** fewer pages get priority
-4. **Aging:** every 10 minutes of waiting reduces the job's effective page score by 5 pages
-5. Earlier order time is used as the final tie-breaker
+Every **10 minutes** an order waits, its effective page score is reduced by **5 pages**.
 
 Example:
 
-A 40-page Green Slot order starts with an effective score of 40.
+```text
+40-page order
 
-After 10 minutes:
-`40 - 5 = 35`
+0 minutes  → 40 effective pages
+10 minutes → 35 effective pages
+20 minutes → 30 effective pages + Fairness Boost
+```
 
-After 20 minutes:
-`40 - 10 = 30`
+After **20 minutes**, the order receives starvation protection.
 
-At 20+ minutes it is marked **Fairness Boost** and is protected from being starved by newer jobs.
+This combines:
 
-This is deterministic scheduling — **no AI is used**.
+```text
+Efficiency + Fairness
+```
 
-ETA remains live in IST. The browser updates the countdown every second and refreshes queue data every 30 seconds.
+### ETA Logic
 
-Terminal Commands
-cd ~/Downloads/CampusPrint_SmartQueue_Aging/backend
+The prototype estimates:
+
+```text
+Setup time = 2 minutes/job
+Printing time = 1 minute/page
+```
+
+Therefore:
+
+```text
+Estimated Print Time
+= 2 + Total Pages
+```
+
+The estimated waiting time is based on the jobs ahead in the same printer queue.
+
+```text
+ETA
+= Current IST Time
++ Estimated Waiting Time
++ Current Job Print Time
+```
+
+The countdown is updated live in the browser.
+
+---
+
+## Features
+
+### Student Features
+
+- Student login using Excel-based credentials.
+- Registration Number as login.
+- Admission/Roll Number as password.
+- Upload PDF, DOC, DOCX, PPT and PPTX files.
+- Select printer:
+  - Boys Co-op Printer
+  - Girls Co-op Printer
+- Black & White printing — **₹2/page**.
+- Colour printing — **₹10/page**.
+- Single-sided / double-sided printing.
+- Multiple copies.
+- Urgent printing — **₹5 priority fee**.
+- Green Slot printing.
+- Demo payment window.
+- Automatic order generation.
+- Live order tracking.
+- Queue position.
+- Estimated waiting time.
+- Estimated print time.
+- ETA in **IST**.
+- Live countdown of remaining time.
+
+### Admin Features
+
+Separate printer-specific admin accounts:
+
+| Printer | ID | Password |
+|---|---|---|
+| Boys Co-op | `boyscoop` | `boys123` |
+| Girls Co-op | `girlscoop` | `girls123` |
+
+Each admin can view orders for their own printer.
+
+Admin can view:
+
+- Order ID.
+- Student roll number.
+- Printer.
+- Priority.
+- Queue position.
+- Estimated wait.
+- ETA.
+- Amount.
+- Payment information.
+- Order status.
+
+Available statuses:
+
+```text
+Pending
+Ready
+Completed
+```
+
+### Backend Features
+
+- FastAPI REST API.
+- SQLite database.
+- SQLAlchemy ORM.
+- Excel student authentication.
+- Automatic Excel-to-database import.
+- Document upload storage.
+- Demo payment processing.
+- Printer-specific queues.
+- Smart queue scheduling.
+- Aging/fairness mechanism.
+- Live IST time endpoint.
+- ETA calculation.
+- Order status management.
+
+### Payment
+
+The current version uses a **demo payment system**.
+
+No real payment is processed.
+
+There is:
+
+```text
+No Razorpay
+No payment API
+No API key
+No real money transfer
+```
+
+---
+
+## Running Commands
+
+### 1. Open Terminal
+
+Open Terminal on macOS.
+
+### 2. Navigate to the backend
+
+If the project is in Downloads:
+
+```bash
+cd ~/Downloads/CampusPrint_README_Formatted/backend
+```
+
+If you extracted the main CampusPrint project instead, use its corresponding `backend` folder.
+
+Check the folder:
+
+```bash
+ls
+```
+
+You should see:
+
+```text
+main.py
+requirements.txt
+use in code.xlsx
+uploads
+```
+
+### 3. Create a virtual environment
+
+```bash
 python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload
+```
 
-http://127.0.0.1:8000/health?utm_source=chatgpt.com- should get status ok
-http://127.0.0.1:8000/api/student/count?utm_source=chatgpt.com
+### 4. Activate the environment
+
+```bash
+source .venv/bin/activate
+```
+
+### 5. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 6. Start the backend
+
+```bash
+uvicorn main:app --reload
+```
+
+The backend should start at:
+
+```text
+http://127.0.0.1:8000
+```
+
+### 7. Check the backend
+
+Open:
+
+```text
+http://127.0.0.1:8000/health
+```
+
+Expected response:
+
+```json
 {
-  "count": 1064
+  "status": "ok"
 }
+```
+
+### 8. Open API documentation
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+### 9. Open the frontend
+
+Keep the backend Terminal running.
+
+Then open:
+
+```text
+frontend/index.html
+```
+
+in your browser.
+
+---
+
+## Quick Demo Commands
+
+### Start backend
+
+```bash
+cd ~/Downloads/CampusPrint_SmartQueue_Aging/backend
+source .venv/bin/activate
+uvicorn main:app --reload
+```
+
+### Open frontend
+
+```text
+frontend/index.html
+```
+
+### Admin accounts
+
+```text
+Boys Co-op
+ID: boyscoop
+Password: boys123
+```
+
+```text
+Girls Co-op
+ID: girlscoop
+Password: girls123
+```
+
+---
+
+## Technology Stack
+
+```text
+Frontend:
+HTML + CSS + JavaScript
+
+Backend:
+Python + FastAPI + Uvicorn
+
+Database:
+SQLite + SQLAlchemy
+
+Student Data:
+Excel + Pandas + OpenPyXL
+```
+
+**Queue management is algorithmic and does not use AI.**
