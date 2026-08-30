@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusPrint.</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- ==================== LANDING ==================== -->
+  <section id="landing-page" class="page active">
+    <div class="landing-shell">
+      <div class="brand">CampusPrint.</div>
+
+      <div class="landing-content">
+        <p class="eyebrow">SMART CAMPUS PRINTING</p>
+        <h1>Print smarter.<br>Print faster.</h1>
+        <p class="subtitle">Your campus printing, simplified.</p>
+
+        <p class="question">How would you like to continue?</p>
+        <div class="role-grid">
+          <button class="role-card" data-page="student-login">
+            <span class="role-title">Student</span>
+            <span class="role-description">Place and track print orders</span>
+          </button>
+          <button class="role-card" data-page="admin-login">
+            <span class="role-title">Admin</span>
+            <span class="role-description">Manage orders and printing activity</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== STUDENT LOGIN ==================== -->
+  <section id="student-login" class="page">
+    <div class="auth-shell">
+      <button class="back-button" data-page="landing-page">← Back</button>
+      <div class="auth-card">
+        <div class="brand">CampusPrint.</div>
+        <p class="eyebrow">STUDENT PORTAL</p>
+        <h2>Welcome back.</h2>
+        <p>Sign in using your student details.</p>
+
+        <form id="student-login-form">
+          <div class="form-group">
+            <label for="student-registration">Registration Number</label>
+            <input id="student-registration" type="text" placeholder="Enter registration number" required>
+          </div>
+          <div class="form-group">
+            <label for="student-roll">Roll Number</label>
+            <input id="student-roll" type="text" placeholder="Enter roll number" required>
+          </div>
+          <button class="primary-button" type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ADMIN LOGIN ==================== -->
+  <section id="admin-login" class="page">
+    <div class="auth-shell">
+      <button class="back-button" data-page="landing-page">← Back</button>
+      <div class="auth-card">
+        <div class="brand">CampusPrint.</div>
+        <p class="eyebrow">ADMIN PORTAL</p>
+        <h2>Admin login.</h2>
+        <p>Manage orders and printing activity.</p>
+
+        <form id="admin-login-form">
+          <div class="form-group">
+            <label for="admin-id">Admin ID</label>
+            <input id="admin-id" type="text" placeholder="Enter admin ID" required>
+          <label for="admin-password">Password</label>
+          <input id="admin-password" type="password" placeholder="Enter password" required>
+          </div>
+          <button class="primary-button" type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== STUDENT DASHBOARD ==================== -->
+  <section id="student-dashboard" class="page">
+    <nav class="navbar">
+      <div class="brand">CampusPrint.</div>
+      <button class="text-button" data-page="landing-page">Logout</button>
+    </nav>
+
+    <div class="container">
+      <div class="page-heading">
+        <p class="eyebrow">STUDENT PORTAL</p>
+        <h1>Welcome back.</h1>
+        <p>What would you like to print today?</p>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="dashboard-card">
+          <span class="card-number">01</span>
+          <h2>Place New Order</h2>
+          <p>Upload your document, choose print settings and select a campus printer.</p>
+          <button class="primary-button card-button" data-page="print-order">Start Printing →</button>
+        </div>
+
+        <div class="dashboard-card">
+          <span class="card-number">02</span>
+          <h2>Track Orders</h2>
+          <p>Check the status of your current and previous print orders.</p>
+          <button class="secondary-button card-button" data-page="order-tracking">View Orders →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PRINT ORDER ==================== -->
+  <section id="print-order" class="page">
+    <nav class="navbar">
+      <div class="brand">CampusPrint.</div>
+      <button class="text-button" data-page="student-dashboard">Cancel</button>
+    </nav>
+
+    <div class="container order-container">
+      <div class="page-heading">
+        <p class="eyebrow">NEW ORDER</p>
+        <h1>Print a document.</h1>
+        <p>Configure your printing preferences below.</p>
+      </div>
+
+      <form id="order-form" class="order-form">
+
+        <div class="form-section">
+          <h3>01 / Student Details</h3>
+          <div class="form-group">
+            <label for="order-roll">Roll Number</label>
+            <input id="order-roll" type="text" placeholder="Enter roll number" required>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>02 / Document</h3>
+          <label class="upload-box" for="print-file">
+            <input id="print-file" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" required>
+            <span class="upload-icon">↑</span>
+            <strong id="file-label">Upload your document</strong>
+            <span>PDF, DOC, DOCX, PPT or PPTX</span>
+          </label>
+        </div>
+
+        <div class="form-section">
+          <h3>03 / Print Settings</h3>
+          <div class="print-settings-grid">
+            <div class="print-setting">
+              <label for="pages">Number of Pages</label>
+              <input id="pages" type="number" min="1" value="1" required>
+            </div>
+
+            <div class="print-setting">
+              <label for="copies">Copies</label>
+              <input id="copies" type="number" min="1" value="1" required>
+            </div>
+
+            <div class="print-setting">
+              <label for="color">Printing Type</label>
+              <select id="color">
+                <option value="bw">Black &amp; White — ₹2/page</option>
+                <option value="color">Colour — ₹10/page</option>
+              </select>
+            </div>
+
+            <div class="print-setting">
+              <label for="sides">Sides</label>
+              <select id="sides">
+                <option value="single">Single-sided</option>
+                <option value="double">Double-sided</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>04 / Select Printer</h3>
+          <div class="choice-list">
+            <label class="choice-card">
+              <input type="radio" name="printer" value="Girls Co-op Printer" required>
+              <span>Girls Co-op Printer</span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="printer" value="Boys Co-op Printer">
+              <span>Boys Co-op Printer</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>05 / Priority Slot</h3>
+          <div class="slot-grid">
+            <label class="slot-card urgent">
+              <input type="radio" name="slot" value="Urgent" required>
+              <span class="slot-info">
+                <strong>Urgent</strong>
+                <small>Priority printing · ₹5 extra</small>
+              </span>
+              <span class="slot-label">URGENT</span>
+            </label>
+
+            <label class="slot-card green">
+              <input type="radio" name="slot" value="Green Slot">
+              <span class="slot-info">
+                <strong>Green Slot</strong>
+                <small>Regular printing · No extra charge</small>
+              </span>
+              <span class="slot-label">GREEN</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="order-summary">
+          <div>
+            <span>Total pages</span>
+            <strong id="summary-pages">1</strong>
+          </div>
+          <div>
+            <span>Print cost</span>
+            <strong id="summary-print-cost">₹2</strong>
+          </div>
+          <div>
+            <span>Priority fee</span>
+            <strong id="summary-priority-fee">₹0</strong>
+          </div>
+          <div>
+            <span>Total</span>
+            <strong id="summary-price">₹2</strong>
+          </div>
+        </div>
+
+        <button class="primary-button large-button" type="submit">Continue to Payment →</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ==================== PAYMENT ==================== -->
+  <section id="payment-page" class="page">
+    <div class="payment-shell">
+      <button class="back-button" data-page="print-order">← Back</button>
+
+      <div class="payment-card">
+        <p class="eyebrow">ORDER SUMMARY</p>
+        <h1>Complete payment.</h1>
+
+        <div class="payment-summary">
+          <div><span>Printer</span><strong id="payment-printer">—</strong></div>
+          <div><span>Print type</span><strong id="payment-type">Black &amp; White</strong></div>
+          <div><span>Pages</span><strong id="payment-pages">1</strong></div>
+          <div><span>Priority</span><strong id="payment-slot">Green Slot</strong></div>
+          <div><span>Total</span><strong id="payment-price">₹2</strong></div>
+        </div>
+
+        <button id="pay-button" class="primary-button large-button">Pay Now →</button>
+        <p class="payment-note">Demo payment gateway</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SUCCESS ==================== -->
+  <section id="order-success" class="page">
+    <div class="success-shell">
+      <div class="success-card">
+        <div class="success-icon">✓</div>
+        <p class="eyebrow">ORDER CONFIRMED</p>
+        <h1>Print order placed.</h1>
+        <p>Your document has been sent to the selected printer.</p>
+        <div class="order-number" id="success-order-number">ORDER #CP1001</div>
+        <div class="status-badge">PROCESSING</div>
+        <button class="primary-button" data-page="order-tracking">Track Order →</button>
+        <button class="secondary-button" data-page="student-dashboard">Back to Dashboard</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ORDER TRACKING ==================== -->
+  <section id="order-tracking" class="page">
+    <nav class="navbar">
+      <div class="brand">CampusPrint.</div>
+      <button class="text-button" data-page="student-dashboard">Dashboard</button>
+    </nav>
+
+    <div class="container">
+      <div class="page-heading">
+        <p class="eyebrow">ORDER TRACKING</p>
+        <h1>Your orders.</h1>
+      </div>
+
+      <div id="tracking-list" class="tracking-list"></div>
+    </div>
+  </section>
+
+  <!-- ==================== ADMIN ==================== -->
+  <section id="admin-dashboard" class="page">
+    <nav class="navbar">
+      <div class="brand">CampusPrint.</div>
+      <span class="admin-label">ADMIN</span>
+      <button class="text-button" data-page="landing-page">Logout</button>
+    </nav>
+
+    <div class="container">
+      <div class="page-heading">
+        <p class="eyebrow">ADMIN CONTROL CENTER</p>
+        <h1>Dashboard.</h1>
+        <p>Manage campus printing orders.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><span>Active Orders</span><strong id="stat-active">0</strong></div>
+        <div class="stat-card"><span>Printing Now</span><strong id="stat-printing">0</strong></div>
+        <div class="stat-card"><span>Completed Today</span><strong id="stat-completed">0</strong></div>
+        <div class="stat-card"><span>Revenue</span><strong id="stat-revenue">₹0</strong></div>
+      </div>
+
+      <div class="admin-section">
+        <div class="section-header">
+          <h2>Recent Orders</h2>
+          <p>Live prototype order database</p>
+        </div>
+
+        <div class="orders-table">
+          <div class="table-header">
+            <span>Order</span>
+            <span>Student</span>
+            <span>Printer</span>
+            <span>Priority</span>
+            <span>Status</span>
+            <span>Amount</span>
+          </div>
+          <div id="admin-orders"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="./script.js"></script>
+</body>
+</html>
